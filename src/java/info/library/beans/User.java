@@ -1,4 +1,4 @@
-package ru.javabegin.training.web.beans;
+package info.library.beans;
 
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;

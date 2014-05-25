@@ -1,4 +1,4 @@
-package ru.javabegin.training.web.validators;
+package info.library.validators;
 
 import java.util.ArrayList;
 import java.util.ResourceBundle;

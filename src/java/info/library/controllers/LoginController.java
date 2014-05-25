@@ -1,4 +1,4 @@
-package ru.javabegin.training.web.controllers;
+package info.library.controllers;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
