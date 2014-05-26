@@ -9,7 +9,7 @@
 
 <application>
 	<resource-bundle>
-		<base-name>ru.javabegin.training.web.nls.messages</base-name>
+		<base-name>info.library.nls.messages</base-name>
 		<var>msg</var>
 	</resource-bundle>
 </application>

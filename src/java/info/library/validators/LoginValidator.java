@@ -11,19 +11,19 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
-@FacesValidator("ru.javabegin.training.web.validators.LoginValidator")
+@FacesValidator("info.library.validators.LoginValidator")
 public class LoginValidator implements Validator {
 
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
-        ResourceBundle bundle = ResourceBundle.getBundle("ru.javabegin.training.web.nls.messages", FacesContext.getCurrentInstance().getViewRoot().getLocale());
+        ResourceBundle bundle = ResourceBundle.getBundle("info.library.nls.messages", FacesContext.getCurrentInstance().getViewRoot().getLocale());
             try{
         
             String checkString = value.toString().trim().toLowerCase();
         if (checkString.length() < 5) {
             throw new IllegalArgumentException(bundle.getString("login_length_error"));
         }
-        if (Character.isLetter(checkString.charAt(0))){
+        if (!Character.isLetter(checkString.charAt(0))){
             throw new IllegalArgumentException(bundle.getString("login_letter_error"));
         }
          if (getIlligalNames().contains(checkString)) {
