@@ -22,11 +22,16 @@ public class GenresFromDB {
         ResultSet rs = null;
         Connection conn = null;
         try {
-            conn = Database.getConnection();
+            try {
+                conn = Database.getConnection();
+            } catch (Exception ex) {
+                Logger.getLogger(GenresFromDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
             stmt = conn.createStatement();
-            rs = stmt.executeQuery("select * from genre order by name");
+            rs = stmt.executeQuery("select * from library.genre order by 'name'");
             while (rs.next()) {
+                System.out.println(rs.getString("name"));
                 Genre genre = new Genre();
                 genre.setName(rs.getString("name"));
                 genre.setId(rs.getLong("id"));

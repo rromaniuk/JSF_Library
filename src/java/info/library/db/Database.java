@@ -1,30 +1,26 @@
 package info.library.db;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
 
 public class Database {
 
     private static Connection conn;
-    private static InitialContext ic;
-    private static DataSource ds;
-
-    public static Connection getConnection() {
-        try {
-            ic = new InitialContext();
-            ds = (DataSource) ic.lookup("java:comp/env/jdbc/Library");
-            conn = ds.getConnection();
-        } catch (SQLException ex) {
-            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NamingException ex) {
-            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+   
+   
+    
+    
+     public static Connection getConnection() throws Exception {
+       try{
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/library", "root", "admin");
+            return conn;
+        }catch(SQLException e){
+            throw new Exception(e.getMessage());
         }
 
-        return conn;
+       
     }
+
+    
 }

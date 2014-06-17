@@ -11,7 +11,7 @@
     <h:body>
         <ui:composition>
             <h4>#{msg.genres}</h4>
-            <h:dataTable value="#{genresFromDB.genreList}" var="gnr">
+            <h:dataTable value="#{genresFromDB.genreList}" var="gnr" styleClass="genres">
                 <h:column> 
                     <h:link value="#{gnr.name}">
                         <f:param name="genre_id" value="gnr.id"/>
