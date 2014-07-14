@@ -100,15 +100,15 @@ public class SearchController {
     
     private void fillAllBooks(){
         fillBooksBySQL("select b.id,b.name,b.isbn,b.page_count,b.publish_year, p.name as publisher, b.descr, "
-               + "a.fio as author, g.name as genre, b.image from book b inner join author a on b.author_id=a.id"
-               + "inner join genre g on b.genre_id=g.id inner join publisher_id=p.id order by b.name");
+               + "a.fio as author, gnr.name as genre, b.image from book b inner join author a on b.author_id=a.id"
+               + "inner join genre gnr on b.genre_id=gnr.id inner join publisher_id=p.id order by b.name");
     }
     public void fillBooksByGenre(){
         Map <String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         Integer genre_id = Integer.valueOf(params.get("genre_id"));
-        fillBooksBySQL("select b.id,b.name,b.isbn,b.page_count,b.publish_year, p.name as publisher, a.fio as author, g.name as genre, b.descr, b.image from book.b"
+        fillBooksBySQL("select b.id,b.name,b.isbn,b.page_count,b.publish_year, p.name as publisher, a.fio as author, gnr.name as genre, b.descr, b.image from book.b"
                +"inner join author a on b.author_id=a.id "
-               +"inner join genre g on b.genre_id=g.id "
+               +"inner join genre gnr on b.genre_id=gnr.id "
                +"inner join publisher p on b.publisher_id=p.id "
                +"where genre_id="+genre_id+"order by b.name");
     }
