@@ -16,6 +16,23 @@
             </ui:define>
 
             <ui:define name="content">
+                <p><strong>#{msg.book_count} #{searchController.currentBookList.size()}</strong></p>
+                <h:dataTable value="#{searchController.currentBookList}" var ="b" cellspacing="10px" columnClasses="col1, col2, col3">
+                    <h:column>
+                        <h:graphicImage value="/ShowImage?id=#{b.id}"
+                    </h:column> 
+                    <h:column>
+                        <div>
+                            
+                        </div>
+                    </h:column>
+                
+                </h:dataTable>
+                    
+                    
+                
+                
+                
                 #{param.genre_id}
             </ui:define>
 
