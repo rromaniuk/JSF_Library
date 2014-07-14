@@ -1,5 +1,6 @@
-package info.library.beans;
+package info.library.controllers;
 
+import info.library.beans.Genre;
 import info.library.db.Database;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -11,25 +12,30 @@ import java.util.logging.Logger;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
-@ManagedBean
+@ManagedBean (eager=true)
 @ApplicationScoped
-public class GenresFromDB {
+public class GenreListController {
 
-    private ArrayList<Genre> genreList = new ArrayList<Genre>();
-
-    private ArrayList<Genre> getGenres() {
+    private ArrayList<Genre> genreList;
+    
+    public GenreListController(){
+        getAllGenres();
+    }
+    
+    private ArrayList<Genre> getAllGenres() {
         Statement stmt = null;
         ResultSet rs = null;
         Connection conn = null;
+        genreList = new ArrayList<Genre>();
         try {
             try {
                 conn = Database.getConnection();
             } catch (Exception ex) {
-                Logger.getLogger(GenresFromDB.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GenreListController.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             stmt = conn.createStatement();
-            rs = stmt.executeQuery("select * from library.genre order by 'name'");
+            rs = stmt.executeQuery("select * from library.genre order by name");
             while (rs.next()) {
                 System.out.println(rs.getString("name"));
                 Genre genre = new Genre();
@@ -39,7 +45,7 @@ public class GenresFromDB {
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(GenresFromDB.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GenreListController.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (stmt != null) {
@@ -52,7 +58,7 @@ public class GenresFromDB {
                     conn.close();
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(GenresFromDB.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(GenreListController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -63,7 +69,9 @@ public class GenresFromDB {
         if (!genreList.isEmpty()) {
             return genreList;
         } else {
-            return getGenres();
+            return getAllGenres();
         }
     }
+
+    
 }
