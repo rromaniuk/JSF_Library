@@ -7,6 +7,7 @@
         <title>
             <ui:insert name="title"/>
         </title>
+        <h:outputStylesheet library="css" name="style_main.css"/>
     </h:head>
     <h:body>
         <div class="container">
@@ -19,19 +20,18 @@
         
             <div class="middle">
                 
-                <div class="content">
-                    <ui:insert name="content">
-                        <ui:include src="/templates/content.xhtml"/>
-                    </ui:insert>
-                </div>
-                
                 <div class="left_menu">
                     <ui:insert name="left_menu">
                         <ui:include src="/templates/left_menu.xhtml"/>
                     </ui:insert>
                 </div>
+                <div class="content">
+                    <ui:insert name="content">
+                        <ui:include src="/templates/content.xhtml"/>
+                    </ui:insert>
+                </div>
             </div> 
-            
+            <div style="clear: both;">&nbsp; </div>>
             <div class="footer">
                 <ui:insert name="footer">
                     <ui:include src="/templates/footer.xhtml"/>
@@ -39,7 +39,7 @@
             </div>
             
             
-        </div> <! end div container>
+        </div> 
     </h:body>
 </html>
 

@@ -17,23 +17,34 @@
 
             <ui:define name="content">
                 <p><strong>#{msg.book_count} #{searchController.currentBookList.size()}</strong></p>
-                <h:dataTable value="#{searchController.currentBookList}" var ="b" cellspacing="10px" columnClasses="col1, col2, col3">
+                <h:dataTable value="#{searchController.currentBookList}" var ="b" cellspacing="10px" columnClasses="col1, col2, col3" rowClasses="row1, row2, row3">
                     <h:column>
-                        <h:graphicImage value="/ShowImage?id=#{b.id}"
+                        <h:graphicImage value="/ShowImage?id=#{b.id}" width ="120" height ="160"/>
                     </h:column> 
                     <h:column>
                         <div>
-                            
+                            <p> <a href="#">#{b.name}</a></p>
+                            <p><strong>#{msg.author_name}:</strong>#{b.author}</p>
+                            <p><strong>#{msg.page_count}:</strong>#{b.pageCount}#{msg.page_count}</p>
+                            <p><strong>#{msg.publisher}:</strong>#{b.publisher}</p>
+                            <p><strong>#{msg.publish_year}:</strong>#{b.publishDate}</p>
+                            <p><strong>#{msg.isbn}:</strong>#{b.isbn}</p>
+
                         </div>
                     </h:column>
                 
                 </h:dataTable>
                     
-                    
+                <h:column>
+                    <div class="book_details">
+                        <p><strong>#{msg.description}:</strong>#{b.description}</p>
+
+                    </div>
+                </h:column>
                 
                 
                 
-                #{param.genre_id}
+                
             </ui:define>
 
         </ui:composition>

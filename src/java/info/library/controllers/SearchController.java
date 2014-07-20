@@ -40,6 +40,7 @@ public class SearchController {
     private SearchType searchType; // stores type of search
     private static Map <String,SearchType> searchList = new HashMap<String, SearchType>(); //stores types of search
     private ArrayList <Book> currentBookList;
+    private String searchString;// stores typed search string from search field
     
     public SearchController(){
         ResourceBundle bundle = ResourceBundle.getBundle("info.library.nls.messages",FacesContext.getCurrentInstance().getViewRoot().getLocale());
@@ -62,6 +63,7 @@ public class SearchController {
 
             stmt = conn.createStatement();
             rs = stmt.executeQuery(sql);
+            currentBookList = new ArrayList<Book>();
             while (rs.next()) {
                 Book book = new Book();
                 book.setId(rs.getLong("id"));
@@ -73,7 +75,7 @@ public class SearchController {
                 book.setPublishDate(rs.getInt("publishDate"));
                 book.setPublisher(rs.getString("publisher"));
                 book.setDescription(rs.getString("description"));
-                getCurrentBookList().add(book);
+                currentBookList.add(book);
                 
             }
 
@@ -100,18 +102,52 @@ public class SearchController {
     
     private void fillAllBooks(){
         fillBooksBySQL("select b.id,b.name,b.isbn,b.page_count,b.publish_year, p.name as publisher, b.descr, "
-               + "a.fio as author, gnr.name as genre, b.image from book b inner join author a on b.author_id=a.id"
-               + "inner join genre gnr on b.genre_id=gnr.id inner join publisher_id=p.id order by b.name");
+               + "a.fio as author, g.name as genre, b.image from book b inner join author a on b.author_id=a.id"
+               + "inner join genre g on b.genre_id=g.id inner join publisher_id=p.id order by b.name");
     }
     public void fillBooksByGenre(){
         Map <String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         Integer genre_id = Integer.valueOf(params.get("genre_id"));
+        fillBooksBySQL("select b.id,b.name,b.isbn,b.page_count,b.publish_year, p.name as publisher, a.fio as author, g.name as genre, b.descr, b.image from book.b"
+               +"inner join author a on b.author_id=a.id "
+               +"inner join genre g on b.genre_id=g.id "
+               +"inner join publisher p on b.publisher_id=p.id "
+               +"where genre_id="+genre_id+"order by b.name");
+    }
+    
+    public void fillBooksBySearch(){
+    if (searchString.trim().length()==0){
+        fillAllBooks();
+        return;
+    }
+    StringBuilder sql = new StringBuilder("select b.descr, b.id,b.name,b.isbn,b.page_count,b.publish_year, p.name as publisher, a.fio as author, g.name as genre, b.image from book b "
+                + "inner join author a on b.author_id=a.id "
+                + "inner join genre g on b.genre_id=g.id "
+                + "inner join publisher p on b.publisher_id=p.id ");
+    
+    
+    if (searchType==SearchType.AUTHOR){
+        sql.append("where lower (a.fio) like '%" + searchString.toLowerCase()+"%' order by b.name");
+        }
+   else if (searchType==SearchType.TITLE){
+        sql.append ("where lower (b.name) like '%" + searchString.toLowerCase()+"%' order by b.name");
+    }
+        fillBooksBySQL(sql.toString());
+    
+    }
+    
+    public void fillBooksByLetters(){
+        Map <String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        String searchLetter = params.get("letters");
         fillBooksBySQL("select b.id,b.name,b.isbn,b.page_count,b.publish_year, p.name as publisher, a.fio as author, gnr.name as genre, b.descr, b.image from book.b"
                +"inner join author a on b.author_id=a.id "
                +"inner join genre gnr on b.genre_id=gnr.id "
                +"inner join publisher p on b.publisher_id=p.id "
-               +"where genre_id="+genre_id+"order by b.name");
+               +"where genre_id="+searchLetter+"order by b.name");
+        
     }
+    
+            
     public Character[] getLetters(){
         Character[] letters = new Character[33];
         letters[0]= 'А';
@@ -219,6 +255,20 @@ public class SearchController {
      */
     public void setCurrentBookList(ArrayList <Book> currentBookList) {
         this.currentBookList = currentBookList;
+    }
+
+    /**
+     * @return the searchString
+     */
+    public String getSearchString() {
+        return searchString;
+    }
+
+    /**
+     * @param searchString the searchString to set
+     */
+    public void setSearchString(String searchString) {
+        this.searchString = searchString;
     }
 
 }   

@@ -2,13 +2,47 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Facelet Title</title>
+        <h:outputStylesheet library="css" name="style_main.css"/>
     </h:head>
     <h:body>
         <ui:composition>
-            header soon will be here
+            <div class="logo">
+                <h:graphicImage library="images" name="library.png" alt="Internet library"/>
+            </div>
+            <div class="descr">
+                <h3>#{msg.welcome_title}</h3> 
+            </div>
+            
+            <div class="welcome">
+                <h:form>
+                <h5>#{msg.welcome}, #{user.username}</h5>
+                <h:commandLink action="#{loginController.exit()}" value="#{msg.exit}"/>
+                </h:form>
+            </div>
+            
+            <div class="search">
+                <h:form styleClass="search_form">
+                    <h:inputText id="search_string" styleClass ="search_string" value="#{searchController.searchString}"/>
+                    <h:commandButton value="#{msg.search}" styleClass="search_button" action="#{searchController.fillBooksBySearch()}"/>
+                    <h:selectOneMenu value="#{searchController.searchType}">
+                        <f:selectItems value="${searchController.searchList}"/>
+                    </h:selectOneMenu>
+                </h:form>
+            </div>
+            <div class="letters">
+                <ui:repeat value="#{searchController.letters}" var="letters">
+                    <h:commandLink action="#{searchController.fillBooksByLetters()}" value="#{letters}">
+                        <f:param name="letters" value="#{letters}" />
+                    </h:commandLink>
+                </ui:repeat>
+                    
+            </div>
+            
+            
         </ui:composition>
         
         

@@ -21,7 +21,7 @@
 
                 <h:form styleClass="login_form">
                     #{msg.input_name} <h:inputText id="username" value="#{user.username}" required="true" requiredMessage="#{msg.login_required}">
-                        <f:validator validatorId="ru.javabegin.training.web.validators.LoginValidator"/>
+                        <f:validator validatorId="info.library.validators.LoginValidator"/>
                     </h:inputText>
                     <h:commandButton action="pages/books?faces-redirect=true" value="Войти"/>
                     <p><h:message for="username" styleClass="error"/></p>
