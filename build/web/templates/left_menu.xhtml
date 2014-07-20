@@ -6,23 +6,29 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Facelet Title</title>
-        <h:outputStylesheet library="css" name="style_main.css"/>
+        <h:outputStylesheet library="css" name="style_main.css"  />
     </h:head>
     <h:body>
         <ui:composition>
+
             <h4>#{msg.genres}</h4>
+
             <h:form styleClass="genres">
-            <ui:repeat value="#{genreListController.genreList}" var="gnr" >
-                
-                   
-                    <h:commandLink action ="#{searchController.fillBooksByGenre()}"value="#{gnr.name}">
-                        <f:param name="genre_id" value="#{gnr.id}"/>
-                    </h:commandLink> 
-                
-                
-            </ui:repeat>
-                </h:form>
+                <ui:repeat value="#{genreController.genreList}" var="g">
+
+
+                    <h:commandLink action="#{searchController.fillBooksByGenre()}" value="#{g.name}">
+
+                        <f:param name="genre_id" value="#{g.id}" />
+
+                    </h:commandLink>
+
+                </ui:repeat>
+            </h:form>
+
+
         </ui:composition>
     </h:body>
 </html>
+
 
