@@ -12,9 +12,10 @@
         <ui:composition>
 
             <h4>#{msg.genres}</h4>
+            
 
             <h:form styleClass="genres">
-                <ui:repeat value="#{genreController.genreList}" var="g">
+                <ui:repeat value="#{genreListController.genreList}" var="g">
 
 
                     <h:commandLink action="#{searchController.fillBooksByGenre()}" value="#{g.name}">

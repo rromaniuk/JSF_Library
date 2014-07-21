@@ -42,12 +42,12 @@
 
             <div class="letters">
                 <h:form>
-                    <ui:repeat value="#{searchController.russianLetters}" var="letter">
+                    <ui:repeat value="#{searchController.letters}" var="letters">
 
 
-                        <h:commandLink action="#{searchController.fillBooksByLetter()}" value="#{letter}">
+                        <h:commandLink action="#{searchController.fillBooksByLetters()}" value="#{letters}">
 
-                            <f:param name="letter" value="#{letter}" />
+                            <f:param name="letters" value="#{letters}" />
 
                         </h:commandLink>
 
