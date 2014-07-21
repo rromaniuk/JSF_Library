@@ -13,7 +13,7 @@ package info.library.beans;
 public class Book {
     private long id;
     private String name;
-    private int pageCount;
+    private int page_count;
     private String isbn;
     private String genre;
     private String author;
@@ -21,7 +21,7 @@ public class Book {
     private String publisher;
     private byte [] image;
     private byte [] content;
-    private String description;
+    private String descr;
     
     public Book(){
         
@@ -58,14 +58,15 @@ public class Book {
      * @return the pageCount
      */
     public int getPageCount() {
-        return pageCount;
+        return page_count;
     }
 
     /**
-     * @param pageCount the pageCount to set
+     * @param page_count
+     *
      */
-    public void setPageCount(int pageCount) {
-        this.pageCount = pageCount;
+    public void setPageCount(int page_count) {
+        this.page_count = page_count;
     }
 
     /**
@@ -170,14 +171,14 @@ public class Book {
      * @return the description
      */
     public String getDescription() {
-        return description;
+        return descr;
     }
 
     /**
-     * @param description the description to set
+     * @param descr the description to set
      */
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescription(String descr) {
+        this.descr = descr;
     }
     
     

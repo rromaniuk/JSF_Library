@@ -71,8 +71,8 @@ public class SearchController {
                 book.setGenre(rs.getString("genre"));
                 book.setIsbn(rs.getString("isbn"));
                 book.setAuthor(rs.getString("author"));
-                book.setPageCount(rs.getInt("pageCount"));
-                book.setPublishDate(rs.getInt("publishDate"));
+                book.setPageCount(rs.getInt("page_count"));
+                book.setPublishDate(rs.getInt("publish_year"));
                 book.setPublisher(rs.getString("publisher"));
                 book.setDescription(rs.getString("descr"));
                 currentBookList.add(book);
