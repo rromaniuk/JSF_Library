@@ -45,7 +45,7 @@
                     <ui:repeat value="#{searchController.letters}" var="letters">
 
 
-                        <h:commandLink action="#{searchController.fillBooksByLetters()}" value="#{letters}">
+                        <h:commandLink action="#{searchController.fillBooksByLetters()}" value="#{letters}" styleClass="#{letter==searchController.selectedLetter ? 'selected_letter':''}">
 
                             <f:param name="letters" value="#{letters}" />
 

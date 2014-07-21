@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      >
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
@@ -45,13 +45,22 @@
                     <h:column>
                         <div class="book_details">
                            <p><strong>#{msg.descr}</strong></p>
-                           <p >#{b.description}</p>
+                           <p >#{b.descr}</p>
                         </div>
                     </h:column>
 
 
 
                 </h:dataTable>
+                <div class ="pager">
+                    <h:form rendered ="#{searchController.totalBooksCount>searchController.booksOnPage}">
+                        <ui:repeat value="#{searchController.pageNumbers}" var="pageNumber">
+                        <h:commandLink value="#{pageNumber}" action ="#{searchController.selectPage()}" styleClass="#{pageNumber==searchController.selectedPageNumber ? 'selected_page':''}">
+                            <f:param name="page_number" value="#{pageNumber}"/>
+                        </h:commandLink>
+                         </ui:repeat>   
+                    </h:form>
+                </div>
             </ui:define>
 
         </ui:composition>

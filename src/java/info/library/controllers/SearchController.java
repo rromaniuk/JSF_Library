@@ -41,6 +41,15 @@ public class SearchController {
     private static Map <String,SearchType> searchList = new HashMap<String, SearchType>(); //stores types of search
     private ArrayList <Book> currentBookList;
     private String searchString;// stores typed search string from search field
+    private ArrayList <Integer> pageNumbers =new ArrayList<Integer>();
+    private String currentSql;
+    private long totalBooksCount;
+    private long selectedPageNumber=1;
+    private char selectedLetter;
+    private int booksOnPage=2;
+    private int selectedGenreId;
+    
+    
     
     public SearchController(){
         ResourceBundle bundle = ResourceBundle.getBundle("info.library.nls.messages",FacesContext.getCurrentInstance().getViewRoot().getLocale());
@@ -50,6 +59,8 @@ public class SearchController {
     }
 
     private void fillBooksBySQL(String sql) {
+        StringBuilder sqlBuilder = new StringBuilder(sql);
+        currentSql = sql;
         Statement stmt = null;
         ResultSet rs = null;
         Connection conn = null;
@@ -62,7 +73,14 @@ public class SearchController {
             }
 
             stmt = conn.createStatement();
-            rs = stmt.executeQuery(sql);
+            rs = stmt.executeQuery(sqlBuilder.toString());
+            rs.last();
+            totalBooksCount =rs.getRow();
+            fillPageNumbers(totalBooksCount, booksOnPage);
+             if (totalBooksCount>booksOnPage){
+                 sqlBuilder.append (" limit ").append (selectedPageNumber*booksOnPage).append (",").append(booksOnPage);
+             }
+             rs=stmt.executeQuery(sqlBuilder.toString()); 
             currentBookList = new ArrayList<Book>();
             while (rs.next()) {
                 Book book = new Book();
@@ -107,12 +125,14 @@ public class SearchController {
     }
     public void fillBooksByGenre(){
         Map <String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        Integer genre_id = Integer.valueOf(params.get("genre_id"));
+       selectedGenreId = Integer.valueOf(params.get("genre_id"));
         fillBooksBySQL("select b.id,b.name,b.isbn,b.page_count,b.publish_year, p.name as publisher, a.fio as author, g.name as genre, b.descr, b.image from book.b"
                +"inner join author a on b.author_id=a.id "
                +"inner join genre g on b.genre_id=g.id "
                +"inner join publisher p on b.publisher_id=p.id "
-               +"where genre_id="+genre_id+"order by b.name");
+               +"where genre_id="+selectedGenreId+"order by b.name");
+        selectedGenreId=-1;
+        selectedPageNumber=-1;
     }
     
     public void fillBooksBySearch(){
@@ -133,21 +153,40 @@ public class SearchController {
         sql.append ("where lower (b.name) like '%" + searchString.toLowerCase()+"%' order by b.name");
     }
         fillBooksBySQL(sql.toString());
+        
+        selectedLetter=' ';
+        selectedGenreId=-1;
+        selectedPageNumber=-1;
     
     }
     
     public void fillBooksByLetters(){
         Map <String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        String searchLetter = params.get("letters");
+        selectedLetter = params.get("letters").charAt(0);
         fillBooksBySQL("select b.id,b.name,b.isbn,b.page_count,b.publish_year, p.name as publisher, a.fio as author, gnr.name as genre, b.descr, b.image from book.b"
                +"inner join author a on b.author_id=a.id "
                +"inner join genre gnr on b.genre_id=gnr.id "
                +"inner join publisher p on b.publisher_id=p.id "
-               +"where genre_id="+searchLetter+"order by b.name");
+               +"where genre_id="+selectedLetter+"order by b.name");
+        selectedGenreId=-1;
+        selectedPageNumber=-1;
         
     }
     
-            
+    public void selectPage(){
+         Map <String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+         selectedPageNumber= Integer.valueOf(params.get("page_number"));
+         fillBooksBySQL(currentSql);
+         
+    }
+    
+    public void fillPageNumbers (long totalBooksCount, int booksCountOnPage){
+        int pageCount =booksCountOnPage>0 ? (int) (totalBooksCount/booksCountOnPage):0;
+        pageNumbers.clear();
+        for (int i=1; i<=pageCount;i++){
+            pageNumbers.add(i);
+        }
+    }
     public Character[] getLetters(){
         Character[] letters = new Character[33];
         letters[0]= 'А';
@@ -271,4 +310,39 @@ public class SearchController {
         this.searchString = searchString;
     }
 
+    /**
+     * @return the selectedPageNumber
+     */
+    public long getSelectedPageNumber() {
+        return selectedPageNumber;
+    }
+
+    /**
+     * @param selectedPageNumber the selectedPageNumber to set
+     */
+    public void setSelectedPageNumber(int selectedPageNumber) {
+        this.selectedPageNumber = selectedPageNumber;
+    }
+
+    /**
+     * @return the pageNumbers
+     */
+    public ArrayList <Integer> getPageNumbers() {
+        return pageNumbers;
+    }
+
+    /**
+     * @param pageNumbers the pageNumbers to set
+     */
+    public void setPageNumbers(ArrayList <Integer> pageNumbers) {
+        this.pageNumbers = pageNumbers;
+    }
+
+    public char getSelectedLetter(){
+        return selectedLetter;
+    }
+    public void setSelectedLetter(char selectedLetter){
+        this.selectedLetter=selectedLetter;
+    }
+    
 }   
