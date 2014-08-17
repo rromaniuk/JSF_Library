@@ -9,12 +9,14 @@
     </h:head>
     <h:body>
         <ui:composition template="/templates/main_template.xhtml">
-
+            <ui:define name="books_count">
+                #{msg.book_count} #{searchController.totalBooksCount}
+            </ui:define>
 
             <ui:define name="title">
                 #{msg.book_list}
             </ui:define>
-
+            
             <ui:define name="content">
                 
                 <p><strong>#{msg.book_count} #{searchController.currentBookList.size()}</strong></p>
@@ -22,19 +24,25 @@
                 <h:dataTable value="#{searchController.currentBookList}" var="b" cellspacing="10px" columnClasses="col1, col2, col3"> 
 
                     <h:column>
+                        <h:outputLink value="#{request.contextPath}/pdfContent?id=#{b.id}" target="_blank">
                         <h:graphicImage  value="/ShowImage?id=#{b.id}" width="120" height="160"/>
+                        </h:outputLink>
                     </h:column>
 
                     <h:column>
 
                         <div>
-                            <p> <a href="#">#{b.name}</a></p>
+                            <p> <h:outputLink value="#{request.contextPath}/pdfContent?id=#{b.id}" target="_blank"> #{b.name}
+                            </h:outputLink>
+                            </p>
                             <p><strong>#{msg.author_name}: </strong>#{b.author}</p>                           
                             <p><strong>#{msg.page_count}:</strong> #{b.pageCount} #{msg.page_count}</p>
                             <p><strong>#{msg.publisher}</strong> #{b.publisher}</p>
                             <p><strong>#{msg.publish_year}</strong> #{b.publishDate}</p>
-
                             <p><strong>#{msg.isbn}</strong> #{b.isbn}</p>
+                            <h:graphicImage  library="images" name="book.gif"/>
+                            <h:outputLink styleClass="content_link" value="#{request.contextPath}/pdfContent?id=#{b.id}" target="_blank"#{msg.read}></h:outputLink> 
+                             
                         </div>
 
                     </h:column>
@@ -52,17 +60,19 @@
 
 
                 </h:dataTable>
-                <div class ="pager">
+                
+            </ui:define>
+                <ui:define name ="paginator">
                     <h:form rendered ="#{searchController.totalBooksCount>searchController.booksOnPage}">
+                        #{msg.pager}
                         <ui:repeat value="#{searchController.pageNumbers}" var="pageNumber">
                         <h:commandLink value="#{pageNumber}" action ="#{searchController.selectPage()}" styleClass="#{pageNumber==searchController.selectedPageNumber ? 'selected_page':''}">
                             <f:param name="page_number" value="#{pageNumber}"/>
                         </h:commandLink>
                          </ui:repeat>   
                     </h:form>
-                </div>
-            </ui:define>
-
+                </ui:define>
+            
         </ui:composition>
     </h:body>
 </html>
