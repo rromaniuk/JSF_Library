@@ -48,6 +48,8 @@ public class SearchController {
     private char selectedLetter;
     private int booksOnPage=2;
     private int selectedGenreId;
+    private boolean requestFromPager;
+    
     
     
     
@@ -73,12 +75,16 @@ public class SearchController {
             }
 
             stmt = conn.createStatement();
+            System.out.println(requestFromPager);
+            if (!requestFromPager){
             rs = stmt.executeQuery(sqlBuilder.toString());
             rs.last();
             totalBooksCount =rs.getRow();
             fillPageNumbers(totalBooksCount, booksOnPage);
-             if (totalBooksCount>booksOnPage){
-                 sqlBuilder.append (" limit ").append (selectedPageNumber*booksOnPage).append (",").append(booksOnPage);
+            }
+            
+            if (totalBooksCount>booksOnPage){
+                 sqlBuilder.append (" limit ").append (selectedPageNumber*booksOnPage - booksOnPage).append (",").append(booksOnPage);
              }
              rs=stmt.executeQuery(sqlBuilder.toString()); 
             currentBookList = new ArrayList<Book>();
@@ -117,6 +123,14 @@ public class SearchController {
 
         
     }
+   
+        private void submitValues(Character selectedLetter, long selectedPageNumber, int selectedGenreId, boolean requestFromPager) {
+        this.selectedLetter = selectedLetter;
+        this.selectedPageNumber = selectedPageNumber;
+        this.selectedGenreId = selectedGenreId;
+        this.requestFromPager = requestFromPager;
+
+    }
     
     private void fillAllBooks(){
         fillBooksBySQL("select b.id,b.name,b.isbn,b.page_count,b.publish_year, p.name as publisher, b.descr," 
@@ -131,8 +145,9 @@ public class SearchController {
                +"inner join genre g on b.genre_id=g.id "
                +"inner join publisher p on b.publisher_id=p.id "
                +"where genre_id="+selectedGenreId+"order by b.name");
-        selectedGenreId=-1;
-        selectedPageNumber=-1;
+        selectedGenreId= ' ';
+        selectedPageNumber=- 1;
+        requestFromPager = false;
     }
     
     public void fillBooksBySearch(){
@@ -180,8 +195,8 @@ public class SearchController {
          
     }
     
-    public void fillPageNumbers (long totalBooksCount, int booksCountOnPage){
-        int pageCount =booksCountOnPage>0 ? (int) (totalBooksCount/booksCountOnPage):0;
+    private void fillPageNumbers (long totalBooksCount, int booksCountOnPage){
+        int pageCount =totalBooksCount>0 ? (int) (totalBooksCount/booksCountOnPage):0;
         pageNumbers.clear();
         for (int i=1; i<=pageCount;i++){
             pageNumbers.add(i);
@@ -265,6 +280,49 @@ public class SearchController {
 
         return image;
     } 
+    public byte[] getContent(int id) {
+        Statement stmt = null;
+        ResultSet rs = null;
+        Connection conn = null;
+
+
+        byte[] content = null;
+        try {
+            try {
+                conn = Database.getConnection();
+            } catch (Exception ex) {
+                Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            stmt = conn.createStatement();
+
+            rs = stmt.executeQuery("select content from book where id=" + id);
+            while (rs.next()) {
+                content = rs.getBytes("content");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Book.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (rs != null) {
+                    rs.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Book.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return content;
+
+    }
+
     
     public SearchType getSearchType(){
         return searchType;
@@ -344,5 +402,7 @@ public class SearchController {
     public void setSelectedLetter(char selectedLetter){
         this.selectedLetter=selectedLetter;
     }
+
+    
     
 }   
