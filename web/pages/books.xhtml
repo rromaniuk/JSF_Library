@@ -41,8 +41,10 @@
                             <p><strong>#{msg.publish_year}</strong> #{b.publishDate}</p>
                             <p><strong>#{msg.isbn}</strong> #{b.isbn}</p>
                             <h:graphicImage  library="images" name="book.gif"/>
-                            <h:outputLink styleClass="content_link" value="#{request.contextPath}/pdfContent?id=#{b.id}" target="_blank"#{msg.read}></h:outputLink> 
+                            <h:outputLink styleClass="content_link" value="#{request.contextPath}/pdfContent?id=#{b.id}" target="_blank">#{msg.read}</h:outputLink> 
                              
+                            
+                            
                         </div>
 
                     </h:column>
@@ -53,7 +55,7 @@
                     <h:column>
                         <div class="book_details">
                            <p><strong>#{msg.descr}</strong></p>
-                           <p >#{b.descr}</p>
+                           <p >#{b.description}</p>
                         </div>
                     </h:column>
 

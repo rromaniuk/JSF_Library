@@ -59,7 +59,13 @@ public class SearchController {
         searchList.put(bundle.getString("book_name"), searchType.TITLE);
         fillAllBooks();
     }
+    private void submitValues(Character selectedLetter, long selectedPageNumber, int selectedGenreId, boolean requestFromPager) {
+        this.selectedLetter = selectedLetter;
+        this.selectedPageNumber = selectedPageNumber;
+        this.selectedGenreId = selectedGenreId;
+        this.requestFromPager = requestFromPager;
 
+    }
     private void fillBooksBySQL(String sql) {
         StringBuilder sqlBuilder = new StringBuilder(sql);
         currentSql = sql;
@@ -79,12 +85,12 @@ public class SearchController {
             if (!requestFromPager){
             rs = stmt.executeQuery(sqlBuilder.toString());
             rs.last();
-            totalBooksCount =rs.getRow();
-            fillPageNumbers(totalBooksCount, booksOnPage);
+                setTotalBooksCount(rs.getRow());
+            fillPageNumbers(getTotalBooksCount(), getBooksOnPage());
             }
             
-            if (totalBooksCount>booksOnPage){
-                 sqlBuilder.append (" limit ").append (selectedPageNumber*booksOnPage - booksOnPage).append (",").append(booksOnPage);
+            if (getTotalBooksCount()>getBooksOnPage()){
+                 sqlBuilder.append (" limit ").append (selectedPageNumber*getBooksOnPage() - getBooksOnPage()).append (",").append(getBooksOnPage());
              }
              rs=stmt.executeQuery(sqlBuilder.toString()); 
             currentBookList = new ArrayList<Book>();
@@ -126,9 +132,9 @@ public class SearchController {
    
         private void submitValues(Character selectedLetter, long selectedPageNumber, int selectedGenreId, boolean requestFromPager) {
         this.selectedLetter = selectedLetter;
-        this.selectedPageNumber = selectedPageNumber;
-        this.selectedGenreId = selectedGenreId;
-        this.requestFromPager = requestFromPager;
+        this.setSelectedPageNumber(selectedPageNumber);
+        this.setSelectedGenreId(selectedGenreId);
+        this.setRequestFromPager(requestFromPager);
 
     }
     
@@ -139,18 +145,18 @@ public class SearchController {
     }
     public void fillBooksByGenre(){
         Map <String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-       selectedGenreId = Integer.valueOf(params.get("genre_id"));
+        submitValues(' ', 1, Integer.valueOf(params.get("genre_id")), false);
+        setSelectedGenreId((int) Integer.valueOf(params.get("genre_id")));
         fillBooksBySQL("select b.id,b.name,b.isbn,b.page_count,b.publish_year, p.name as publisher, a.fio as author, g.name as genre, b.descr, b.image from book.b"
                +"inner join author a on b.author_id=a.id "
                +"inner join genre g on b.genre_id=g.id "
                +"inner join publisher p on b.publisher_id=p.id "
-               +"where genre_id="+selectedGenreId+"order by b.name");
-        selectedGenreId= ' ';
-        selectedPageNumber=- 1;
-        requestFromPager = false;
+               +"where genre_id="+getSelectedGenreId()+"order by b.name");
+       
     }
     
     public void fillBooksBySearch(){
+        submitValues(' ', 1, -1, false);
     if (searchString.trim().length()==0){
         fillAllBooks();
         return;
@@ -169,28 +175,26 @@ public class SearchController {
     }
         fillBooksBySQL(sql.toString());
         
-        selectedLetter=' ';
-        selectedGenreId=-1;
-        selectedPageNumber=-1;
+        
     
     }
     
     public void fillBooksByLetters(){
         Map <String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+         submitValues(selectedLetter, 1, -1, false);
         selectedLetter = params.get("letters").charAt(0);
         fillBooksBySQL("select b.id,b.name,b.isbn,b.page_count,b.publish_year, p.name as publisher, a.fio as author, gnr.name as genre, b.descr, b.image from book.b"
                +"inner join author a on b.author_id=a.id "
                +"inner join genre gnr on b.genre_id=gnr.id "
                +"inner join publisher p on b.publisher_id=p.id "
                +"where genre_id="+selectedLetter+"order by b.name");
-        selectedGenreId=-1;
-        selectedPageNumber=-1;
+        
         
     }
     
     public void selectPage(){
          Map <String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-         selectedPageNumber= Integer.valueOf(params.get("page_number"));
+         setSelectedPageNumber((long) Integer.valueOf(params.get("page_number")));
          fillBooksBySQL(currentSql);
          
     }
@@ -379,7 +383,7 @@ public class SearchController {
      * @param selectedPageNumber the selectedPageNumber to set
      */
     public void setSelectedPageNumber(int selectedPageNumber) {
-        this.selectedPageNumber = selectedPageNumber;
+        this.setSelectedPageNumber(selectedPageNumber);
     }
 
     /**
@@ -401,6 +405,69 @@ public class SearchController {
     }
     public void setSelectedLetter(char selectedLetter){
         this.selectedLetter=selectedLetter;
+    }
+
+    /**
+     * @return the totalBooksCount
+     */
+    public long getTotalBooksCount() {
+        return totalBooksCount;
+    }
+
+    /**
+     * @param totalBooksCount the totalBooksCount to set
+     */
+    public void setTotalBooksCount(long totalBooksCount) {
+        this.totalBooksCount = totalBooksCount;
+    }
+
+    /**
+     * @param selectedPageNumber the selectedPageNumber to set
+     */
+    public void setSelectedPageNumber(long selectedPageNumber) {
+        this.selectedPageNumber = selectedPageNumber;
+    }
+
+    /**
+     * @return the booksOnPage
+     */
+    public int getBooksOnPage() {
+        return booksOnPage;
+    }
+
+    /**
+     * @param booksOnPage the booksOnPage to set
+     */
+    public void setBooksOnPage(int booksOnPage) {
+        this.booksOnPage = booksOnPage;
+    }
+
+    /**
+     * @return the selectedGenreId
+     */
+    public int getSelectedGenreId() {
+        return selectedGenreId;
+    }
+
+    /**
+     * @param selectedGenreId the selectedGenreId to set
+     */
+    public void setSelectedGenreId(int selectedGenreId) {
+        this.selectedGenreId = selectedGenreId;
+    }
+
+    /**
+     * @return the requestFromPager
+     */
+    public boolean getRequestFromPager() {
+        return requestFromPager;
+    }
+
+    /**
+     * @param requestFromPager the requestFromPager to set
+     */
+    public void setRequestFromPager(boolean requestFromPager) {
+        this.requestFromPager = requestFromPager;
     }
 
     
