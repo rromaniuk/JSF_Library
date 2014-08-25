@@ -6,6 +6,7 @@
     <h:head>
         <title>#{msg.welcome_title}</title>
         <h:outputStylesheet library="css" name="style_index.css"  />
+        <h:outputScript library="js" name="library.js" target="head"/>
     </h:head>
     <h:body>
 
@@ -20,12 +21,23 @@
                 <p class="title">#{msg.input_info}</p>
 
                 <h:form styleClass="login_form">
-                    #{msg.input_name} <h:inputText id="username" value="#{user.username}" required="true" requiredMessage="#{msg.login_required}">
+                    <table align="left" width="350">
+                        <tr><td align="left"> #{msg.input_name} 
+                        <h:inputText id="username" value="#{user.username}" required="true" requiredMessage="#{msg.login_required}">
                         <f:validator validatorId="info.library.validators.LoginValidator"/>
-                    </h:inputText>
-                    <h:commandButton action="pages/books?faces-redirect=true" value="Войти"/>
-                    <p><h:message for="username" styleClass="error"/></p>
-                </h:form>
+                        <f:ajax event="keyup" render="loginError"/>
+                        </h:inputText>
+                        </td><td>
+                                <h:commandButton action="pages/books?faces-redirect=true" value="Войти" onclick="return checkValue(this.form,'#{msg.login_required}');"/>
+                            </td>
+                         </tr>
+                        <tr><td>
+                                <p><h:message id="loginError" for="username" styleClass="error"/></p>
+                        </td></tr>
+                        </table>
+                    
+                    
+                    </h:form>
 
             </div>
 
