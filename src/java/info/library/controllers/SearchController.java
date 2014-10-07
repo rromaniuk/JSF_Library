@@ -130,13 +130,7 @@ public class SearchController {
         
     }
    
-        private void submitValues(Character selectedLetter, long selectedPageNumber, int selectedGenreId, boolean requestFromPager) {
-        this.selectedLetter = selectedLetter;
-        this.setSelectedPageNumber(selectedPageNumber);
-        this.setSelectedGenreId(selectedGenreId);
-        this.setRequestFromPager(requestFromPager);
-
-    }
+     
     
     private void fillAllBooks(){
         fillBooksBySQL("select b.id,b.name,b.isbn,b.page_count,b.publish_year, p.name as publisher, b.descr," 
@@ -194,7 +188,7 @@ public class SearchController {
     
     public void selectPage(){
          Map <String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-         setSelectedPageNumber((long) Integer.valueOf(params.get("page_number")));
+         selectedPageNumber=((long) Integer.valueOf(params.get("page_number")));
          fillBooksBySQL(currentSql);
          
     }
@@ -383,7 +377,7 @@ public class SearchController {
      * @param selectedPageNumber the selectedPageNumber to set
      */
     public void setSelectedPageNumber(int selectedPageNumber) {
-        this.setSelectedPageNumber(selectedPageNumber);
+        this.selectedPageNumber=selectedPageNumber;
     }
 
     /**
@@ -424,9 +418,7 @@ public class SearchController {
     /**
      * @param selectedPageNumber the selectedPageNumber to set
      */
-    public void setSelectedPageNumber(long selectedPageNumber) {
-        this.selectedPageNumber = selectedPageNumber;
-    }
+  
 
     /**
      * @return the booksOnPage

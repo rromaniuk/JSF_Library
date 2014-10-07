@@ -33,7 +33,7 @@
                     <p><strong><ui:insert name="books_count"/></strong></p>
                     
                     <div class="pager">
-                        <ui:insert name="paginator"/>
+                        <h:panelGroup id="pages1" layout="block"> <ui:insert name="paginator"/></h:panelGroup>
                     </div> 
                     
                     <div class="content_books">
@@ -43,7 +43,7 @@
                     </div>
                     
                     <div class="pager">
-                        <ui:insert name="paginator"/>
+                        <h:panelGroup id="pages2" layout="block"> <ui:insert name="paginator"/></h:panelGroup>
                     </div>
                 </div>
 
