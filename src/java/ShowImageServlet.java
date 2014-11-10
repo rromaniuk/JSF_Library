@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-import info.library.controllers.SearchController;
+import info.library.controllers.BookListController;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -39,7 +39,7 @@ public class ShowImageServlet extends HttpServlet {
         try {
             /* TODO output your page here. You may use following sample code. */
         int id = Integer.valueOf(request.getParameter("id"));
-            SearchController searchController = (SearchController) request.getSession(false).getAttribute("searchController");
+            BookListController searchController = (BookListController) request.getSession(false).getAttribute("searchController");
             byte [] image = searchController.getImage(id);
             response.setContentLength(image.length);
             out.write(image);

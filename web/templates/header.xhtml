@@ -22,6 +22,18 @@
 
             <div class="welcome">
                 <h:form>
+                    <p>
+                    <h:commandLink action="#{localChanger.changeLocale('en')}">
+                    
+                    
+                    </h:commandLink>
+                    
+                    <h:commandLink action="#{localChanger.changeLocale('ru')}">
+                    
+                    
+                    </h:commandLink>
+                    </p>
+                    
                     <h5>#{msg.welcome},  #{user.username}</h5>
                     <h:commandLink action="#{loginController.exit()}" value="#{msg.exit}"/>
 
@@ -32,9 +44,9 @@
 
             <div class="search_div">
                 <h:form styleClass="search_form">
-                    <h:inputText id="search_string" styleClass="search_string" value="#{searchController.searchString}"/>
+                    <h:inputText id="search_string" styleClass="search_string" value="#{bookListController.searchString}"/>
                     <h:commandButton value="#{msg.search}" styleClass="search_button">
-                        <f:ajax onevent="showProgress" execute="@form" render=":booksList @form :lettersForm :pages1: pages2 :booksCount" listener="#{searchController.fillBooksBySearch()}"/>
+                        <f:ajax onevent="showProgress" execute="@form" render=":booksList @form :lettersForm :pages1: pages2 :booksCount" listener="bookListControllerer.fillBooksBySearch()}"/>
                     
                     
                     </h:commandButton> 
@@ -42,18 +54,18 @@
                     
                     
                     
-                    <h:selectOneMenu value="#{searchController.searchType}">
-                        <f:selectItems value="${searchController.searchList}" />
+                    <h:selectOneMenu valuebookListControllerller.searchType}">
+                        <f:selectItems valbookListControllerroller.searchList}" />
                     </h:selectOneMenu>
                 </h:form>
             </div>
 
             <div class="letters">
                 <h:form>
-                    <ui:repeat value="#{searchController.letters}" var="letters">
+                    <ui:repeat vbookListControllerntroller.letters}" var="letters">
 
 
-                        <h:commandLink action="#{searchController.fillBooksByLetters()}" value="#{letters}" styleClass="#{letter==searchController.selectedLetter ? 'selected_letter':''}">
+                        <h:commandLink bookListControllerController.fillBooksByLetters()}" value="#{letters}" styleClassbookListControllerchController.selectedLetter ? 'selected_letter':''}">
 
                             <f:param name="letters" value="#{letters}" />
 

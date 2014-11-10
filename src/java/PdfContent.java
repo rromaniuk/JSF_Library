@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-import info.library.controllers.SearchController;
+import info.library.controllers.BookListController;
 import java.io.IOException;
 import java.io.OutputStream;
 import javax.servlet.ServletException;
@@ -36,7 +36,7 @@ public class PdfContent extends HttpServlet {
         try {
             /* TODO output your page here. You may use following sample code. */
             int id = Integer.valueOf(request.getParameter("id"));
-            SearchController searchController = (SearchController) request.getSession(false).getAttribute("SearchController");
+            BookListController searchController = (BookListController) request.getSession(false).getAttribute("SearchController");
             byte[] content = searchController.getContent(id);
             response.setContentLength(content.length);
             out.write(content);
